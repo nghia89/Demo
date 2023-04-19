@@ -1,4 +1,4 @@
-const express= require("express");
+const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
@@ -9,18 +9,19 @@ app.use(morgan("dev"))
 app.use(helmet())
 app.use(compression())
 // init db
-
-
+require('./dbs/init.mongodb')
+const { checkOverload } = require('./helpers/check.connect')
+checkOverload()
 
 // init router
-app.get('/', (req,res,next)=>{
-    const strCompress='Hello Vietnamese'
+app.get('/', (req, res, next) => {
+    const strCompress = 'Hello Vietnamese'
     return res.status(200).json({
-        message:"Welcome Vietnamese",
-        metadata:strCompress.repeat(10000)
+        message: "Welcome Vietnamese",
+        metadata: strCompress.repeat(10000)
     })
 })
 // handling error
 
 
-module.exports= app;
+module.exports = app;
