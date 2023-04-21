@@ -15,11 +15,15 @@ const checkOverload = () => {
     const numberCores = os.cpus().length
     const memoryUsage = process.memoryUsage().rss;
     const maxConnect = numberCores * 5
-    setInterval(() => {
-        console.log(`memory usage:: ${memoryUsage / 1024 / 1024} MB`)
-        if (numberConnection > maxConnect)
-            console.log(`Connection overload detected`)
-    }, 5000);
+
+    console.log(`memory usage:: ${memoryUsage / 1024 / 1024} MB`)
+    if (numberConnection > maxConnect)
+        console.log(`Connection overload detected`)
+    // setInterval(() => {
+    //     console.log(`memory usage:: ${memoryUsage / 1024 / 1024} MB`)
+    //     if (numberConnection > maxConnect)
+    //         console.log(`Connection overload detected`)
+    // }, 5000);
 
 }
 module.exports = {

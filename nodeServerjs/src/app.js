@@ -16,13 +16,7 @@ const { checkOverload } = require('./helpers/check.connect')
 checkOverload()
 
 // init router
-app.get('/', (req, res, next) => {
-    const strCompress = 'Hello Vietnamese'
-    return res.status(200).json({
-        message: "Welcome Vietnamese",
-        metadata: strCompress.repeat(10000)
-    })
-})
+app.use('', require('./routers/index'))
 // handling error
 
 
