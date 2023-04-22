@@ -3,10 +3,11 @@
 const shopModel = require("../models/shop.model")
 const bcrypt = require('bcrypt')
 const crypto = require("node:crypto");
-const { createTokenPair } = require("./../auth/authUtils.js");
+const { createTokenPair, getKey } = require("./../auth/authUtils.js");
 const KeyTokenService = require("./keyToken.service");
 const { getInfoData } = require("../utils");
-const { BadRequestError, ConflictRequestError } = require('../core/error.response')
+const { BadRequestError, ConflictRequestError, AuthFailureError } = require('../core/error.response');
+const { findByEmail } = require("./shop.service");
 const RoleShop = {
     SHOP: 'SHOP',
     WRITER: 'WRITER',
@@ -17,8 +18,31 @@ const RoleShop = {
 
 class AccessService {
 
-    static signUp = async ({ name, email, password }) => {
+    static logIn = async ({ email, password, refreshToken = null }) => {
+        const shop = await findByEmail({ email });
+        if (!shop) throw new BadRequestError('Shop not register')
 
+        const match = await bcrypt.compare(password, shop.password)
+        if (!match) throw new AuthFailureError()
+
+        const { publicKey, privateKey } = getKey()
+        const tokens = await createTokenPair({ userId: shop._id, email }, publicKey, privateKey)
+
+        await KeyTokenService.createKeyToken(
+            {
+                userId: shop._id,
+                refreshToken: tokens.refreshToken,
+                privateKey, publicKey
+            }
+        )
+
+        return {
+            shop: getInfoData({ fields: ['_id', 'name', 'email'], object: shop }),
+            tokens
+        }
+    }
+
+    static signUp = async ({ name, email, password }) => {
         // step1 : check email exists
         const holderShop = await shopModel.findOne({ email })
         if (holderShop) {
@@ -31,9 +55,7 @@ class AccessService {
         })
 
         if (newShop) {
-            const privateKey = crypto.randomBytes(64).toString('hex')
-            const publicKey = crypto.randomBytes(64).toString('hex')
-
+            const { publicKey, privateKey } = getKey()
             const keyStore = await KeyTokenService.createKeyToken({
                 userId: newShop._id,
                 privateKey,

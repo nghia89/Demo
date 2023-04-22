@@ -28,6 +28,14 @@ class ConflictRequestError extends ErrorResponse {
     }
 }
 
+class AuthFailureError extends ErrorResponse {
+    constructor(message = "UnAuthorized", statusCode = 401) {
+        super(message, statusCode)
+    }
+}
+
 module.exports = {
-    BadRequestError, ConflictRequestError
+    BadRequestError,
+    ConflictRequestError,
+    AuthFailureError
 }

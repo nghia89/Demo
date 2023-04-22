@@ -8,6 +8,15 @@ x-api-key: 50c49fd8fce287467325db0fcb85ec6b07622fdecff83a42527299433b346afbd8a9a
 
 {
     "name":"Shop News",
-    "email":"shopnew06@gmail.com",
+    "email":"shopnew@gmail.com",
+    "password":"abc@123"
+}
+
+POST {{url_dev}}shop/login
+Content-Type: application/json
+x-api-key: 50c49fd8fce287467325db0fcb85ec6b07622fdecff83a42527299433b346afbd8a9ae52a2c5489ddfcdaf98bfab491220a8d5888ce9be433d5760699078f15b
+
+{
+    "email":"shopnew@gmail.com",
     "password":"abc@123"
 }
