@@ -4,10 +4,10 @@
 
 POST {{url_dev}}shop/signup
 Content-Type: application/json
-x-api-key: dab7b6bc784e65dce790b27415e498e85f1b0f38fcd45e489d0e07857e6c03fd585df79662ce1c6d931c59055a957352a44efa31673801e7290b2f2ae8c44b0a
+x-api-key: 50c49fd8fce287467325db0fcb85ec6b07622fdecff83a42527299433b346afbd8a9ae52a2c5489ddfcdaf98bfab491220a8d5888ce9be433d5760699078f15b
 
 {
     "name":"Shop News",
-    "email":"shopnew05@gmail.com",
+    "email":"shopnew06@gmail.com",
     "password":"abc@123"
 }
