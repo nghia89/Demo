@@ -2,14 +2,14 @@
 
 const { model, Schema } = require('mongoose'); // Erase if already required
 
-const DOCUMENT_NAME = 'key'
-const COLLECTION_NAME = 'keys'
+const DOCUMENT_NAME = 'Key'
+const COLLECTION_NAME = 'Keys'
 // Declare the Schema of the Mongo model
-var userSchema = new Schema({
+var keyTokenSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         required: true,
-        trim: true,
+        ref: 'Shop',
     },
     publicKey: {
         type: String,
@@ -22,7 +22,8 @@ var userSchema = new Schema({
         trim: true,
     },
     refreshToken: {
-        type: String,
+        type: Array,
+        default: []
 
     }
 }, {
@@ -31,4 +32,4 @@ var userSchema = new Schema({
 });
 
 //Export the model
-module.exports = model(DOCUMENT_NAME, userSchema);
+module.exports = model(DOCUMENT_NAME, keyTokenSchema);

@@ -4,6 +4,7 @@
 
 POST {{url_dev}}shop/signup
 Content-Type: application/json
+x-api-key: dab7b6bc784e65dce790b27415e498e85f1b0f38fcd45e489d0e07857e6c03fd585df79662ce1c6d931c59055a957352a44efa31673801e7290b2f2ae8c44b0a
 
 {
     "name":"Shop News",
