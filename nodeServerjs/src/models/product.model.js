@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
     product_price: { type: Number, required: true },
     product_quantity: { type: Number, required: true },
     product_type: { type: String, required: true, enum: ['Electronics', 'Clothing', 'Furniture'] },
-    product_shop: { type: Number, ref: 'Shop' },
+    product_shop: { type: mongoose.Types.ObjectId, ref: 'Shop' },
     product_attributes: { type: mongoose.Schema.Types.Mixed, required: true },
 }, {
     collection: COLLECTION_NAME,
