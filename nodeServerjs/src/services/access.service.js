@@ -6,8 +6,9 @@ const crypto = require("node:crypto");
 const { createTokenPair, getKey } = require("./../auth/authUtils.js");
 const KeyTokenService = require("./keyToken.service");
 const { getInfoData } = require("../utils");
-const { BadRequestError, ConflictRequestError, AuthFailureError } = require('../core/error.response');
+const { BadRequestError, ConflictRequestError, AuthFailureError, ForbiddenError } = require('../core/error.response');
 const { findByEmail } = require("./shop.service");
+const { verifyJWT } = require("../auth/checkAuth");
 const RoleShop = {
     SHOP: 'SHOP',
     WRITER: 'WRITER',
@@ -17,6 +18,33 @@ const RoleShop = {
 
 
 class AccessService {
+
+    static handlerRefreshToken = async (refreshToken) => {
+        console.log('refreshToken', refreshToken)
+        var foundToken = await KeyTokenService.findByFreshTokenUsed(refreshToken)
+        if (foundToken) {
+            const { userId, email } = await verifyJWT(refreshToken, foundToken.privateKey)
+            await KeyTokenService.removeByKeyUserId(userId)
+            throw new ForbiddenError()
+        }
+
+        const holderToken = await KeyTokenService.findByFreshToken(refreshToken)
+        if (!holderToken) throw new AuthFailureError('Shop Not register 1')
+
+        const { userId, email } = await verifyJWT(refreshToken, holderToken.privateKey)
+        console.log('2---', userId, email)
+
+        const foundShop = await findByEmail({ email })
+        if (!foundShop) throw new AuthFailureError('Shop Not register 2')
+        const tokens = await createTokenPair({ userId, email }, holderToken.publicKey, holderToken.privateKey)
+
+        await KeyTokenService.updateRefreshToken(holderToken._id, tokens.refreshToken, refreshToken)
+
+        return {
+            shop: getInfoData({ fields: ['_id', 'name', 'email'], object: foundShop }),
+            tokens
+        }
+    }
 
     static logOut = async (keyStore) => {
         return await KeyTokenService.removeByKeyId(keyStore._id)

@@ -6,6 +6,9 @@ const { findById } = require('./../services/apikey.service')
 const JWT = require('jsonwebtoken')
 const { HEADER } = require('./../utils/constants')
 const asyncHandler = require('./../helpers/asyncHandler')
+
+
+
 const apiKey = async (req, res, next) => {
     try {
         const key = req.headers[HEADER.API_KEY]?.toString()
@@ -73,8 +76,13 @@ const authentication = asyncHandler(async (req, res, next) => {
     }
 })
 
+const verifyJWT = async (token, keySecret) => {
+    return await JWT.verify(token, keySecret)
+}
+
 module.exports = {
     apiKey,
     permission,
-    authentication
+    authentication,
+    verifyJWT
 }
