@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
 const app = express();
-
+const { authentication } = require('./auth/checkAuth')
 // init middleware
 app.use(morgan("dev"))
 app.use(helmet())
@@ -14,7 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // init db
 require('./dbs/init.mongodb')
-const { checkOverload } = require('./helpers/check.connect')
+const { checkOverload } = require('./helpers/check.connect');
+const router = require('./routers/access');
 checkOverload()
 
 // init router
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
     error.status = 404
     next(error)
 })
+
 
 app.use((error, req, res, next) => {
     const statusCode = error.status || 500

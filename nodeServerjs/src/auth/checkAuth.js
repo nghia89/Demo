@@ -1,12 +1,11 @@
 'use strict'
 
-const HEADER = {
-    API_KEY: 'x-api-key',
-    AUTHORIZATION: 'authorization'
-}
+const { AuthFailureError, NotFoundError } = require('../core/error.response')
+const { findByUserId } = require('../services/keyToken.service')
 const { findById } = require('./../services/apikey.service')
-
-
+const JWT = require('jsonwebtoken')
+const { HEADER } = require('./../utils/constants')
+const asyncHandler = require('./../helpers/asyncHandler')
 const apiKey = async (req, res, next) => {
     try {
         const key = req.headers[HEADER.API_KEY]?.toString()
@@ -52,14 +51,30 @@ const permission = (permission) => {
 }
 
 
-const asyncHandler = fn => {
-    return (req, res, next) => {
-        fn(req, res, next).catch(next)
+const authentication = asyncHandler(async (req, res, next) => {
+    const userId = req.headers[HEADER.CLIENT_ID]
+    if (!userId)
+        throw new AuthFailureError()
+
+    const keyStore = await findByUserId(userId);
+    if (!keyStore) throw new NotFoundError('Header is not define')
+
+    const accessToken = req.headers[HEADER.AUTHORIZATION]
+    if (!accessToken) throw new AuthFailureError()
+
+    try {
+        const decodeToken = JWT.verify(accessToken, keyStore.publicKey)
+        if (userId !== decodeToken.userId)
+            throw new AuthFailureError()
+        req.keyStore = keyStore
+        return next()
+    } catch (error) {
+        throw error
     }
-}
+})
 
 module.exports = {
     apiKey,
     permission,
-    asyncHandler
+    authentication
 }
