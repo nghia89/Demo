@@ -19,26 +19,21 @@ const RoleShop = {
 
 class AccessService {
 
-    static handlerRefreshToken = async (refreshToken) => {
-        console.log('refreshToken', refreshToken)
-        var foundToken = await KeyTokenService.findByFreshTokenUsed(refreshToken)
-        if (foundToken) {
-            const { userId, email } = await verifyJWT(refreshToken, foundToken.privateKey)
+    static handlerRefreshToken = async ({ refreshToken, user, keyStore }) => {
+        const { userId, email } = user;
+        if (keyStore.refreshTokensUsed.includes(refreshToken)) {
             await KeyTokenService.removeByKeyUserId(userId)
-            throw new ForbiddenError()
+            throw new ForbiddenError('Something wrong happened, please login')
         }
+        if (keyStore.refreshToken != refreshToken)
+            throw new AuthFailureError('Shop not registerted')
 
-        const holderToken = await KeyTokenService.findByFreshToken(refreshToken)
-        if (!holderToken) throw new AuthFailureError('Shop Not register 1')
-
-        const { userId, email } = await verifyJWT(refreshToken, holderToken.privateKey)
-        console.log('2---', userId, email)
-
+        console.log('aaa', user)
         const foundShop = await findByEmail({ email })
         if (!foundShop) throw new AuthFailureError('Shop Not register 2')
-        const tokens = await createTokenPair({ userId, email }, holderToken.publicKey, holderToken.privateKey)
+        const tokens = await createTokenPair({ userId, email }, keyStore.publicKey, keyStore.privateKey)
 
-        await KeyTokenService.updateRefreshToken(holderToken._id, tokens.refreshToken, refreshToken)
+        await KeyTokenService.updateRefreshToken(keyStore._id, tokens.refreshToken, refreshToken)
 
         return {
             shop: getInfoData({ fields: ['_id', 'name', 'email'], object: foundShop }),
@@ -88,10 +83,13 @@ class AccessService {
 
         if (newShop) {
             const { publicKey, privateKey } = getKey()
+            //created token pair
+            const tokens = await createTokenPair({ userId: newShop._id, email }, publicKey, privateKey)
             const keyStore = await KeyTokenService.createKeyToken({
                 userId: newShop._id,
                 privateKey,
-                publicKey
+                publicKey,
+                refreshToken: tokens.refreshToken,
             })
 
             if (!keyStore) {
@@ -101,8 +99,7 @@ class AccessService {
                 }
             }
 
-            //created token pair
-            const tokens = await createTokenPair({ userId: newShop._id, email }, publicKey, privateKey)
+
             console.log('Created Token Success::', tokens)
             return {
                 metadata: {

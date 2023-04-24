@@ -57,18 +57,36 @@ const permission = (permission) => {
 const authentication = asyncHandler(async (req, res, next) => {
     const userId = req.headers[HEADER.CLIENT_ID]
     if (!userId)
-        throw new AuthFailureError()
+        throw new AuthFailureError('Invalid Request')
 
-    const keyStore = await findByUserId(userId);
+    const keyStore = await findByUserId(userId)
     if (!keyStore) throw new NotFoundError('Header is not define')
 
+    const refreshToken = req.headers[HEADER.REFRESHTOKEN]
+    if (refreshToken) {
+        try {
+            console.log('decodeToken 2', refreshToken)
+            const decodeToken = JWT.verify(refreshToken, keyStore.privateKey)
+            console.log('decodeToken', decodeToken)
+            if (userId !== decodeToken.userId)
+                throw new AuthFailureError('invalid UserId')
+
+            req.keyStore = keyStore
+            req.user = decodeToken
+            req.refreshToken = refreshToken
+            return next()
+        } catch (error) {
+            throw error
+        }
+    }
+
     const accessToken = req.headers[HEADER.AUTHORIZATION]
-    if (!accessToken) throw new AuthFailureError()
+    if (!accessToken) throw new AuthFailureError('Header is not define')
 
     try {
         const decodeToken = JWT.verify(accessToken, keyStore.publicKey)
         if (userId !== decodeToken.userId)
-            throw new AuthFailureError()
+            throw new AuthFailureError('invalid UserId')
         req.keyStore = keyStore
         return next()
     } catch (error) {

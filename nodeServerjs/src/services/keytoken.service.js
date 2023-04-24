@@ -39,7 +39,7 @@ class KeyTokenService {
     }
 
     static removeByKeyUserId = async (userId) => {
-        return await keyTokenModel.findByIdAndRemove({ user: userId })
+        return await keyTokenModel.findOneAndRemove({ user: new Types.ObjectId(userId) })
     }
 
     static updateRefreshToken = async (id, newRefreshToken, oblRefreshToken) => {
