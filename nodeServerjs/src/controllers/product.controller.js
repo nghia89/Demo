@@ -16,6 +16,58 @@ class ProductController {
             )
         }).send(res)
     }
+
+    searchProductByUser = async (req, res, next) => {
+        new OK({
+            message: ' Product Search Ok',
+            metadata: await ProductService.searchProductByUser({
+                query: req.params.query
+            }
+            )
+        }).send(res)
+    }
+
+    findAllDraftsForShop = async (req, res, next) => {
+        new OK({
+            message: 'Get Product Ok',
+            metadata: await ProductService.findAllDraftsForShop({
+                product_shop: req.user.userId
+            }
+            )
+        }).send(res)
+    }
+
+    findAllPublishForShop = async (req, res, next) => {
+        new OK({
+            message: 'Get Product Publish Ok',
+            metadata: await ProductService.findAllPublishForShop({
+                product_shop: req.user.userId
+            }
+            )
+        }).send(res)
+    }
+
+    publishProductByShop = async (req, res, next) => {
+        new OK({
+            message: ' Product Publish Ok',
+            metadata: await ProductService.publishProductByShop({
+                product_shop: req.user.userId,
+                product_id: req.params.id
+            }
+            )
+        }).send(res)
+    }
+
+    unPublishProductByShop = async (req, res, next) => {
+        new OK({
+            message: ' Product UnPublish Ok',
+            metadata: await ProductService.unPublishProductByShop({
+                product_shop: req.user.userId,
+                product_id: req.params.id
+            }
+            )
+        }).send(res)
+    }
 }
 
 module.exports = new ProductController()

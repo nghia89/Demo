@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
 const app = express();
-const { authentication } = require('./auth/checkAuth')
+
 // init middleware
 app.use(morgan("dev"))
 app.use(helmet())

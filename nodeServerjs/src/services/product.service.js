@@ -1,7 +1,8 @@
 'use strict'
-
+const { Types } = require('mongoose')
 const { product, electronic, clothing, furniture } = require('./../models/product.model')
 const { BadRequestError } = require('./../core/error.response')
+const { findAllDraftsForShop, findAllPublishForShop, publishProductByShop, unPublishProductByShop, searchProductByUser } = require('./../models/repositories/product.repo')
 // define Factory class to product
 class ProductFactory {
 
@@ -23,6 +24,27 @@ class ProductFactory {
         //     default:
         //         throw new BadRequestError(`Invalid Product Types ${type}`)
         // }
+    }
+
+    static async unPublishProductByShop({ product_shop, product_id }) {
+        return await unPublishProductByShop({ product_shop, product_id });
+    }
+    static async searchProductByUser({ query }) {
+        return await searchProductByUser({ query });
+    }
+
+    static async findAllDraftsForShop({ product_shop, limit = 50, skip = 0 }) {
+        const query = { product_shop: new Types.ObjectId(product_shop), isDraft: true }
+        return await findAllDraftsForShop({ query, limit, skip })
+    }
+
+    static async findAllPublishForShop({ product_shop, limit = 50, skip = 0 }) {
+        const query = { product_shop: new Types.ObjectId(product_shop), isPublished: true }
+        return await findAllPublishForShop({ query, limit, skip })
+    }
+
+    static async publishProductByShop({ product_shop, product_id }) {
+        return await publishProductByShop({ product_shop, product_id });
     }
 }
 
@@ -58,8 +80,8 @@ class Clothing extends Product {
         })
 
         if (!newClothing) throw new BadRequestError('create new clothing error')
-
         const newProduct = await super.createProduct(newClothing._id);
+
         if (!newProduct) throw new BadRequestError('create new product error')
         return newProduct
     }
