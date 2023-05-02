@@ -9,15 +9,17 @@ const router = express.Router();
 
 
 router.post('/product/search/:query', asyncHandler(productController.searchProductByUser))
+router.get('/product/all', asyncHandler(productController.findAllProducts))
+router.get('/product/:product_id', asyncHandler(productController.findProduct))
 
 router.use(authentication)
+router.post('/product/create', asyncHandler(productController.CreateProduct))
+router.patch('/product/update/:productId', asyncHandler(productController.updateProduct))
 router.post('/product/publish/:id', asyncHandler(productController.publishProductByShop))
 router.post('/product/un_publish/:id', asyncHandler(productController.unPublishProductByShop))
 
 
 router.get('/product/draft/all', asyncHandler(productController.findAllDraftsForShop))
 router.get('/product/publish/all', asyncHandler(productController.findAllPublishForShop))
-router.get('/product/all', asyncHandler(productController.findAllProducts))
-router.get('/product/:product_id', asyncHandler(productController.findProduct))
 
 module.exports = router

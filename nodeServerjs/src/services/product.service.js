@@ -4,7 +4,9 @@ const { product, electronic, clothing, furniture } = require('./../models/produc
 const { BadRequestError } = require('./../core/error.response')
 const { findAllDraftsForShop, findAllPublishForShop, publishProductByShop,
     unPublishProductByShop, searchProductByUser, findProduct,
-    findAllProducts } = require('./../models/repositories/product.repo')
+    findAllProducts,
+    updateProductById } = require('./../models/repositories/product.repo')
+const { removeUndefinedObject, updateNestedObjectParse } = require('../utils')
 // define Factory class to product
 class ProductFactory {
 
@@ -27,6 +29,14 @@ class ProductFactory {
         //         throw new BadRequestError(`Invalid Product Types ${type}`)
         // }
     }
+
+    static async updateProduct(type, productId, payload) {
+        const productClass = ProductFactory.productRegistry[type]
+        if (!type) throw new BadRequestError(`Invalid Product Types ${type}`)
+        return new productClass(payload).updateProduct(productId)
+    }
+
+
 
     static async unPublishProductByShop({ product_shop, product_id }) {
         return await unPublishProductByShop({ product_shop, product_id });
@@ -80,6 +90,10 @@ class Product {
             _id: id
         })
     }
+
+    async updateProduct(productId, bodyUpdate) {
+        return await updateProductById({ productId, bodyUpdate, model: product })
+    }
 }
 
 
@@ -96,6 +110,18 @@ class Clothing extends Product {
         if (!newProduct) throw new BadRequestError('create new product error')
         return newProduct
     }
+
+
+    async updateProduct(productId) {
+        const objectParams = removeUndefinedObject(this)
+        if (objectParams.product_attributes) {
+            await updateProductById({ productId, bodyUpdate: updateNestedObjectParse(objectParams.product_attributes), model: clothing })
+        }
+
+        const updateProduct = await super.updateProduct(productId, updateNestedObjectParse(objectParams))
+        return updateProduct
+    }
+
 }
 
 class Furniture extends Product {

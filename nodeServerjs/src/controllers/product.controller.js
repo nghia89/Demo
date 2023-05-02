@@ -17,6 +17,16 @@ class ProductController {
         }).send(res)
     }
 
+    updateProduct = async (req, res, next) => {
+        new OK({
+            message: 'Update Product Ok',
+            metadata: await ProductService.updateProduct(req.body.product_type, req.params.productId, {
+                ...req.body,
+                product_shop: req.user.userId
+            })
+        }).send(res)
+    }
+
     searchProductByUser = async (req, res, next) => {
         new OK({
             message: ' Product Search Ok',
