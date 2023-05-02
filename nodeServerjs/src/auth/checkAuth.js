@@ -84,14 +84,18 @@ const authentication = asyncHandler(async (req, res, next) => {
     if (!accessToken) throw new AuthFailureError('Header is not define')
 
     try {
-        const decodeToken = JWT.verify(accessToken, keyStore.publicKey)
+        console.log('accessToken', accessToken)
+        const decodeToken = await JWT.verify(accessToken, keyStore.publicKey)
+
         if (userId !== decodeToken.userId)
             throw new AuthFailureError('invalid UserId')
         req.keyStore = keyStore
         req.user = decodeToken
         return next()
     } catch (error) {
-        throw error
+        return res.status(403).json({
+            message: 'Forbidden'
+        })
     }
 })
 

@@ -2,7 +2,9 @@
 const { Types } = require('mongoose')
 const { product, electronic, clothing, furniture } = require('./../models/product.model')
 const { BadRequestError } = require('./../core/error.response')
-const { findAllDraftsForShop, findAllPublishForShop, publishProductByShop, unPublishProductByShop, searchProductByUser } = require('./../models/repositories/product.repo')
+const { findAllDraftsForShop, findAllPublishForShop, publishProductByShop,
+    unPublishProductByShop, searchProductByUser, findProduct,
+    findAllProducts } = require('./../models/repositories/product.repo')
 // define Factory class to product
 class ProductFactory {
 
@@ -42,6 +44,15 @@ class ProductFactory {
         const query = { product_shop: new Types.ObjectId(product_shop), isPublished: true }
         return await findAllPublishForShop({ query, limit, skip })
     }
+
+    static async findAllProducts({ limit = 50, sort = 'ctime', page = 1, filter = { isPublished: true }, select = ['product_name', 'product_price', 'product_thumb'] }) {
+        return await findAllProducts({ limit, sort, page, filter, select })
+    }
+
+    static async findProduct({ product_id, unSelect = ['__v'] }) {
+        return await findProduct({ product_id, unSelect })
+    }
+
 
     static async publishProductByShop({ product_shop, product_id }) {
         return await publishProductByShop({ product_shop, product_id });
