@@ -2,8 +2,12 @@
 
 const { Schema, model } = require('mongoose'); // Erase if already required
 
+
+const DOCUMENT_NAME = 'Discount'
+const COLLECTION_NAME = "Discounts"
+
 // Declare the Schema of the Mongo model
-var userSchema = new Schema({
+var discountSchema = new Schema({
     discount_name: { type: String, require: true },
     discount_description: { type: String, require: true },
     discount_type: { type: String, default: 'fixed_amount' },
@@ -21,7 +25,12 @@ var userSchema = new Schema({
     discount_is_active: { type: Boolean, default: true },
     discount_applies_to: { type: String, require: true, enum: ['all', 'specific'] },
     discount_product_ids: { type: Array, default: [] }
+}, {
+    timestamps: true,
+    collation: COLLECTION_NAME
 });
 
 //Export the model
-module.exports = model('User', userSchema);
+module.exports = {
+    discount: model(DOCUMENT_NAME, discountSchema)
+};
