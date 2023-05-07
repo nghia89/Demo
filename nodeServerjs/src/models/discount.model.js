@@ -1,6 +1,6 @@
 'use strict'
 
-const { Schema, model } = require('mongoose'); // Erase if already required
+const { Schema, model, Types } = require('mongoose'); // Erase if already required
 
 
 const DOCUMENT_NAME = 'Discount'
@@ -20,14 +20,14 @@ var discountSchema = new Schema({
     discount_users_used: { type: Array, default: [] },//ai dang dung
     discount_max_uses_per_user: { type: Number, require: true },// sl cho phep toi da
     discount_min_order_value: { type: Number, require: true },
-    discount_shopId: { type: Schema.Types.ObjectId, ref: 'Shop' },
+    discount_shopId: { type: Types.ObjectId, ref: 'Shop' },
 
     discount_is_active: { type: Boolean, default: true },
     discount_applies_to: { type: String, require: true, enum: ['all', 'specific'] },
     discount_product_ids: { type: Array, default: [] }
 }, {
     timestamps: true,
-    collation: COLLECTION_NAME
+    collection: COLLECTION_NAME
 });
 
 //Export the model

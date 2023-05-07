@@ -5,6 +5,7 @@ const { Types } = require('mongoose')
 
 
 const stringToObjectId = (value) => {
+    if (!value) return null
     return new Types.ObjectId(value)
 }
 

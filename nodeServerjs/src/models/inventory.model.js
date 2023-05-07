@@ -13,7 +13,7 @@ var inventorySchema = new mongoose.Schema({
     inven_reservations: { type: Array, default: [] }
 }, {
     timestamps: true,
-    collation: COLLECTION_NAME
+    collection: COLLECTION_NAME
 });
 
 //Export the model
