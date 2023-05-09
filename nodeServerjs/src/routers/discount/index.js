@@ -13,6 +13,6 @@ router.get('/list_product_code', asyncHandler(discountController.getAllDiscountC
 
 router.use(authentication)
 router.post('', asyncHandler(discountController.createDiscountCode))
-router.post('list_with_product', asyncHandler(discountController.getAllDiscountCodesWithProduct))
+router.get('', asyncHandler(discountController.getAllDiscountCodesByShop))
 
 module.exports = router

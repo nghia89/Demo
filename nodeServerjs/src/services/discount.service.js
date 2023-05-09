@@ -97,13 +97,12 @@ class DiscountService {
     }
 
     static async getDiscountAmount({ userId, codeId, shopId, products }) {
-        const foundDiscount = await getFoundDiscount({ code, shopId })
-        if (foundDiscount && foundDiscount.discount_is_active) {
+        const foundDiscount = await getFoundDiscount({ code: codeId, shopId })
+        if (!foundDiscount) {
             throw new NotFoundError('Discount exists')
         }
         const { discount_type, discount_value, discount_is_active, discount_max_uses,
-            discount_min_order_value, discount_max_uses_per_user } = foundDiscount
-
+            discount_min_order_value, discount_max_uses_per_user, discount_users_used } = foundDiscount
         if (!discount_is_active) throw new NotFoundError('discount expried')
         if (!discount_max_uses) throw new NotFoundError('discount are out')
         let totalOrder = 0
