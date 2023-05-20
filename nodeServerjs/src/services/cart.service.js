@@ -22,15 +22,28 @@ class CartService {
 
     static async updateUserCartQuantity({ userId, product }) {
         const { productId, quantity } = product
+        const foundCartProduct = await cartModel.findOne({ cart_userId: userId, "cart_products.productId": productId, cart_state: 'active' });
+        if (!foundCartProduct) {
+            console.log('foundCartProduct', foundCartProduct)
+            const query = { cart_userId: userId, cart_state: 'active' },
+                updateSet = {
+                    $addToSet: {
+                        cart_products: product
+                    }
+                }, options = { upsert: true, new: false }
 
-        const query = { cart_userId: userId, "cart_products.productId": productId, cart_state: 'active' },
-            updateSet = {
-                $inc: {
-                    'cart_products.$.quantity': quantity
-                }
-            }, options = { upsert: true, new: true }
+            return await cartModel.findOneAndUpdate(query, updateSet, options)
+        } else {
+            const query = { cart_userId: userId, "cart_products.productId": productId, cart_state: 'active' },
+                updateSet = {
+                    $inc: {
+                        'cart_products.$.quantity': quantity
+                    }
+                }, options = { upsert: true, new: true }
 
-        return await cartModel.findOneAndUpdate(query, updateSet, options)
+            return await cartModel.findOneAndUpdate(query, updateSet, options)
+        }
+
     }
 
     static async addCart({ userId, product = {} }) {
