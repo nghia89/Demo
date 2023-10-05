@@ -12,6 +12,13 @@ app.use(helmet())
 app.use(compression())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+// redis test
+require('./tests/inventory.test')
+const productService = require('./tests/product.test')
+productService.purchaseProduct('product001', 10)
+
 // init db
 require('./dbs/init.mongodb')
 const { checkOverload } = require('./helpers/check.connect');
