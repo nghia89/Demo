@@ -8,6 +8,7 @@ const { findAllDraftsForShop, findAllPublishForShop, publishProductByShop,
     updateProductById } = require('./../models/repositories/product.repo')
 const { removeUndefinedObject, updateNestedObjectParse } = require('../utils')
 const { insertInventory } = require('../models/repositories/inventory.repo')
+const { pushNotifyToSystem } = require('./notification.service')
 // define Factory class to product
 class ProductFactory {
 
@@ -92,6 +93,15 @@ class Product {
         })
         if (newProduct) {
             await insertInventory({ productId: newProduct._id, shopId: this.product_shop, stock: this.product_quantity })
+            pushNotifyToSystem({
+                type: 'SHOP-001',
+                receivedId: 1,
+                senderId: this.product_shop,
+                options: {
+                    product_name: this.product_name,
+                    shop_name: this.shop_name
+                }
+            }).then((rsp) => console.log(rsp))
         }
         return newProduct
     }

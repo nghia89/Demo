@@ -15,5 +15,6 @@ router.use('/v1/api/discount', require('./discount'))
 router.use('/v1/api', require('./product'))
 router.use('/v1/api', require('./comment'))
 router.use('/v1/api', require('./inventory'))
+router.use('/v1/api', require('./notification'))
 
 module.exports = router
