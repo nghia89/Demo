@@ -4,10 +4,10 @@ const amqp = require('amqplib')
 
 const connectToRabbitMQ = async () => {
     try {
-        const connect = amqp.connect('amqp://localhost')
+        const connect = await amqp.connect('amqp://localhost')
         if (!connect) throw new Error('amqp not connection')
         const channel = await connect.createChannel()
-        return (channel, connection)
+        return { channel, connect }
     } catch (error) {
 
     }
@@ -30,7 +30,7 @@ const consumerQueue = async (channel, queueName) => {
     try {
         await channel.assertQueue(queueName, { durable: true })
         console.log('Waiting for messages...');
-        channel.consumer(queueName, msg => {
+        channel.consume(queueName, msg => {
             console.log(`Received message: ${queueName}`, msg.content.toString())
         }, {
             noAck: true
