@@ -20,7 +20,7 @@ const pushNotifyToSystem = async ({
         noti_receivedId: receivedId,
         noti_options: options
     })
-    return new newNoti;
+    return newNoti;
 }
 
 const listNotiByUser = async ({

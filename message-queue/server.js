@@ -14,12 +14,12 @@ const queueName = 'test-topic';
 consumerToQueueNormal(queueName).then(() => {
     console.log(`Message consumerToQueueNormal started: ${queueName}`);
 }).catch(err => {
-    console.error(`message Error: ${err.message}`);
+    console.error(`consumerToQueueNormal message Error: ${err.message}`);
 })
 
 
 consumerToQueueFailed(queueName).then(() => {
     console.log(`Message consumerToQueueFailed started: ${queueName}`);
 }).catch(err => {
-    console.error(`message Error: ${err.message}`);
+    console.error(`consumerToQueueFailed message Error: ${err.message}`);
 })

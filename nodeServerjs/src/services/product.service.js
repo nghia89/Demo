@@ -9,6 +9,7 @@ const { findAllDraftsForShop, findAllPublishForShop, publishProductByShop,
 const { removeUndefinedObject, updateNestedObjectParse } = require('../utils')
 const { insertInventory } = require('../models/repositories/inventory.repo')
 const { pushNotifyToSystem } = require('./notification.service')
+const { acquireLock } = require('./redis.service')
 // define Factory class to product
 class ProductFactory {
 
@@ -67,6 +68,8 @@ class ProductFactory {
 
 
     static async publishProductByShop({ product_shop, product_id }) {
+        const keyLock = await acquireLock("productId", 1, 1)
+        console.log('keyLock', keyLock)
         return await publishProductByShop({ product_shop, product_id });
     }
 }
