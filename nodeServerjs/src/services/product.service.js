@@ -68,8 +68,6 @@ class ProductFactory {
 
 
     static async publishProductByShop({ product_shop, product_id }) {
-        const keyLock = await acquireLock("productId", 1, 1)
-        console.log('keyLock', keyLock)
         return await publishProductByShop({ product_shop, product_id });
     }
 }

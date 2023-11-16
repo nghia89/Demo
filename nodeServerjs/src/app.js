@@ -15,9 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // redis test
-require('./tests/inventory.test')
-const productService = require('./tests/product.test')
-productService.purchaseProduct('product001', 10)
+// require('./tests/inventory.test')
+// const productService = require('./tests/product.test')
+// productService.purchaseProduct('product001', 10)
 
 // init db
 require('./dbs/init.mongodb')
