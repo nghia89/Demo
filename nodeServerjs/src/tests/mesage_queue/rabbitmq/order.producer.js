@@ -2,7 +2,7 @@
 const amqp = require('amqplib')
 
 async function consumeOrderMessage() {
-    const connect = await amqp.connect('amqps://yuqgbuwk:jDZ0Lz3tKCqVtSrlnY-fhbLrCEWggsp-@armadillo.rmq.cloudamqp.com/yuqgbuwk')
+    const connect = await amqp.connect('amqp://yuqgbuwk:jDZ0Lz3tKCqVtSrlnY-fhbLrCEWggsp-@armadillo.rmq.cloudamqp.com:5672/yuqgbuwk')
     const channel = await connect.createChannel()
     const queueName = 'order-message'
 

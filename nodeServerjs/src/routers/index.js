@@ -5,6 +5,7 @@ const { apiKey, permission } = require('../auth/checkAuth');
 const router = express.Router();
 
 //check apiKey
+router.use('/v1/api/upload', require('./upload'))
 router.use(apiKey)
 router.use(permission('0000'))
 

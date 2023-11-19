@@ -4,7 +4,7 @@ const amqp = require('amqplib')
 
 const connectToRabbitMQ = async () => {
     try {
-        const connect = await amqp.connect('amqps://yuqgbuwk:jDZ0Lz3tKCqVtSrlnY-fhbLrCEWggsp-@armadillo.rmq.cloudamqp.com')
+        const connect = await amqp.connect('amqp://yuqgbuwk:jDZ0Lz3tKCqVtSrlnY-fhbLrCEWggsp-@armadillo.rmq.cloudamqp.com:5672/yuqgbuwk')
         if (!connect) throw new Error('amqp not connection')
         console.log(connect)
         const channel = await connect.createConfirmChannel()
