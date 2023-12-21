@@ -4,7 +4,7 @@ const { createClient } = require('redis')
 const { promisify } = require('util')
 const { reservationInventory } = require('../models/repositories/inventory.repo');
 
-const redisClient = createClient({ url: 'redis://default:OjrUH8ccHByADlkMkBaVK0uLg0lQmugg@redis-11156.c295.ap-southeast-1-1.ec2.cloud.redislabs.com:11156' });
+const redisClient = createClient({ url: 'redis://default:nzIh8vyGV3DEgaZx4ec6LxXuvspC7h6W@redis-19472.c292.ap-southeast-1-1.ec2.cloud.redislabs.com:19472' });
 
 redisClient.on('error', err => console.log('Redis Client Error', err));
 redisClient.connect();
