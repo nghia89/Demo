@@ -1,6 +1,6 @@
 'use strict'
 
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteBucketCommand } = require('@aws-sdk/client-s3')
 
 
 const s3Config = {
@@ -13,4 +13,4 @@ const s3Config = {
 
 const S3 = new S3Client(s3Config);
 
-module.exports = { S3, PutObjectCommand }
+module.exports = { S3, PutObjectCommand, GetObjectCommand, DeleteBucketCommand }
