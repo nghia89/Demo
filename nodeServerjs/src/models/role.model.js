@@ -14,7 +14,7 @@ const roleSchema = new Schema({
         {
             resource: { type: Schema.Types.ObjectId, ref: 'Resource', required: true },
             actions: [{ type: String, required: true }],
-            attributes: [{ type: String, required: '*' }]
+            attributes: { type: String, required: '*' }
         }
     ]
 

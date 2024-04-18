@@ -84,7 +84,6 @@ const authentication = asyncHandler(async (req, res, next) => {
     if (!accessToken) throw new AuthFailureError('Header is not define')
 
     try {
-        console.log('accessToken', accessToken)
         const decodeToken = await JWT.verify(accessToken, keyStore.publicKey)
 
         if (userId !== decodeToken.userId)

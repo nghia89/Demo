@@ -6,9 +6,9 @@ const DOCUMENT_NAME = 'Resource'
 const COLLECTION_NAME = 'Resources'
 
 const resourceSchema = new Schema({
-    res_name: { type: String, required: true },//profile
-    res_slug: { type: String, required: true },//00001
-    res_description: { type: String, default: '' },
+    src_name: { type: String, required: true },//profile
+    src_slug: { type: String, required: true },//00001
+    src_description: { type: String, default: '' },
 
 }, {
     timestamps: true,
