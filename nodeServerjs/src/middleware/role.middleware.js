@@ -5,6 +5,6 @@ const AccessControl = require('accesscontrol');
 //     { role: 'admin', resource: 'profile', action: 'delete:any', attributes: '*, !views' },
 
 //     { role: 'shop', resource: 'profile', action: 'read:own', attributes: '*' },
-// // ];
+// ];
 // module.exports = new AccessControl(grantList)
 module.exports = new AccessControl()
