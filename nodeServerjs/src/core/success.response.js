@@ -2,11 +2,13 @@
 
 const StatusCode = {
     CREATED: 201,
-    OK: 200
+    OK: 200,
+    INTERNAL_SERVER: 500
 }
 const ReasonStatusCode = {
     CREATED: 'Created',
-    OK: 'Success'
+    OK: 'Success',
+    INTERNAL_SERVER: 'INTERNAL_SERVER'
 }
 
 class SuccessResponse {
@@ -33,7 +35,12 @@ class CREATED extends SuccessResponse {
     }
 }
 
+class RedisErrorResponse extends SuccessResponse {
+    constructor({ message, statusCode = StatusCode.INTERNAL_SERVER, reasonStatusCode = ReasonStatusCode.INTERNAL_SERVER, metadata }) {
+        super({ message, statusCode, reasonStatusCode, metadata })
+    }
+}
 
 module.exports = {
-    OK, CREATED
+    OK, CREATED, RedisErrorResponse
 }

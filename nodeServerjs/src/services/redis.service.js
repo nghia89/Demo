@@ -1,17 +1,22 @@
 'use strict'
 
-const { createClient } = require('redis')
 const { promisify } = require('util')
 const { reservationInventory } = require('../models/repositories/inventory.repo');
 
 // const redisClient = createClient({ url: 'redis://default:Mw1usthzEOqOephYn5ziuGkyZRbR7gxr@redis-12482.c295.ap-southeast-1-1.ec2.cloud.redislabs.com:12482' });
-const redisClient = createClient({
-    host: "localhost",
-    port: 6379
-});
+//local
+// const redisClient = createClient({
+//     host: "localhost",
+//     port: 6379
+// });
 
-redisClient.on('error', err => console.log('Redis Client Error', err));
-redisClient.connect();
+// redisClient.on('error', err => console.log('Redis Client Error', err));
+// redisClient.connect();
+
+const { getRedis } = require('./../dbs/init.redis')
+const {
+    instanceConnect: redisClient
+} = getRedis()
 
 // const pexpire = promisify(redisClient.pExpire).bind(redisClient)
 // const setnxAsync = promisify(redisClient.setEx).bind(redisClient)
