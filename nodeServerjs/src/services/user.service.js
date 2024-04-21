@@ -1,7 +1,9 @@
 'use strict'
 const USER = require('./../models/user.model')
-const { ErrorResponse } = require('./../core/success.response')
-const newUser = async ({
+const { ErrorResponse } = require('./../core/success.response');
+const { sendEmailToken } = require('./email.service');
+
+const newUserService = async ({
     email = null,
     captcha = null
 }) => {
@@ -10,7 +12,10 @@ const newUser = async ({
     if (user) {
         return ErrorResponse({ message: 'Email already exists' })
     }
-    return user;
+    const result = await sendEmailToken({
+        email
+    })
+    return result;
 }
 
-module.exports = { newUser }
+module.exports = { newUserService }

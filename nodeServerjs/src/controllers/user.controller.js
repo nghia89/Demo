@@ -1,11 +1,11 @@
-
-
-
+'use strict'
+const { newUserService } = require('./../services/user.service')
+const { OK } = require('./../core/success.response')
 class UserController {
     newUser = async (req, res, next) => {
         new OK({
-            message: 'Upload file Ok',
-            metadata: await UploadService.uploadImageFromUrl()
+            message: 'new user success',
+            metadata: await newUserService({ email: req.body.email })
         }).send(res)
     }
 
