@@ -76,7 +76,6 @@ class AccessService {
             throw new BadRequestError('Error: Shop already registered')
         }
         const passwordHash = await bcrypt.hash(password, 10)
-        console.log('passwordHash', passwordHash)
         const newShop = await shopModel.create({
             name, email, password: passwordHash, roles: [RoleShop.SHOP]
         })

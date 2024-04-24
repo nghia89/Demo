@@ -8,5 +8,8 @@ const router = express.Router();
 router.post('/new_user', asyncHandler(userController.newUser))
 
 
+router.get('/welcome_back', asyncHandler(userController.checkRegisterEmailToken))
+
+
 
 module.exports = router

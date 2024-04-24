@@ -1,5 +1,5 @@
 'use strict'
-const { newUserService } = require('./../services/user.service')
+const { newUserService, checkLoginEmailTokenService } = require('./../services/user.service')
 const { OK } = require('./../core/success.response')
 class UserController {
     newUser = async (req, res, next) => {
@@ -9,8 +9,11 @@ class UserController {
         }).send(res)
     }
 
-    checkRegisterEmailToken = async () => {
-
+    checkRegisterEmailToken = async (req, res, next) => {
+        new OK({
+            message: 'LogIn Ok!',
+            metadata: await checkLoginEmailTokenService({ token: req.query.token })
+        }).send(res)
     }
 
 }

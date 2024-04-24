@@ -1,6 +1,7 @@
 'use strict'
 const { randomInt } = require('crypto')
 const OTP = require('./../models/otp.model')
+const { NotFoundError } = require('../core/error.response')
 const generatorTokenRandom = () => {
     const token = randomInt(0, Math.pow(2, 32))
     return token;
@@ -17,4 +18,15 @@ const newOtp = async ({
     return newToken
 }
 
-module.exports = { newOtp };
+const checkEmailToken = async ({
+    token
+}) => {
+    const data = await OTP.findOne({
+        otp_token: token
+    })
+    if (!data) throw new NotFoundError("Token not found")
+    OTP.deleteOne({ otp_token: token }).then();
+    return data
+}
+
+module.exports = { newOtp, checkEmailToken };
