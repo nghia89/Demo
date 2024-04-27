@@ -58,6 +58,9 @@ const replacePlaceholder = (template, params) => {
     return template
 }
 
+const randomProductId = () => {
+    return Math.floor(Math.random() * 899999_100000)
+}
 
 module.exports = {
     getInfoData,
@@ -66,5 +69,6 @@ module.exports = {
     removeUndefinedObject,
     updateNestedObjectParse,
     stringToObjectId,
-    replacePlaceholder
+    replacePlaceholder,
+    randomProductId
 }

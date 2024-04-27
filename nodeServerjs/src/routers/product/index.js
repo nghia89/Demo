@@ -22,4 +22,9 @@ router.post('/product/un_publish/:id', asyncHandler(productController.unPublishP
 router.get('/product/draft/all', asyncHandler(productController.findAllDraftsForShop))
 router.get('/product/publish/all', asyncHandler(productController.findAllPublishForShop))
 
+
+router.post('/spu/new', asyncHandler(productController.createSpu))
+router.get('/sku/select_variation', asyncHandler(productController.findOneSku))
+router.get('/spu/info', asyncHandler(productController.findOneSpu))
+
 module.exports = router

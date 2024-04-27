@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose'); // Erase if already required
+const slugify = require("slugify");
 
 const DOCUMENT_NAME = "Spu"
 const COLLECTION_NAME = "Spus"
@@ -16,7 +17,6 @@ const spuSchema = new mongoose.Schema({
     product_slug: { type: String },
     product_price: { type: Number, required: true },
     product_quantity: { type: Number, required: true },
-    product_type: { type: String, required: true, enum: ['Electronics', 'Clothing', 'Furniture'] },
     product_shop: { type: mongoose.Types.ObjectId, ref: 'Shop' },
     product_attributes: { type: mongoose.Schema.Types.Mixed, required: true },
     /* {
