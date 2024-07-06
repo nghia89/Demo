@@ -21,9 +21,14 @@ require('./tests/inventory.test')
 
 // init db
 require('./dbs/init.mongodb')
-// init redis
-const initRedis = require('./dbs/init.redis')
-initRedis.initRedis()
+// // init redis
+// const initRedis = require('./dbs/init.redis')
+// initRedis.initRedis()
+
+// init ioredis
+const initioRedis = require('./dbs/init.ioredis')
+initioRedis.initRedis({ IOREDIS_IS_ENABLED: true })
+
 // init elasticsearch
 const initElasticsearch = require('./dbs/init.elasticsearch')
 initElasticsearch.init({ ELASTICSEARCH_IS_ENABLED: true })
